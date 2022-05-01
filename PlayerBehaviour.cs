@@ -31,7 +31,7 @@ public class PlayerBehaviour : CharacterBase
 	public float speedRun;
 	public float speedWalk;
 	public float rotateSpeed = 3.0F;
-	public CharacterController controller;
+	private CharacterController controller;
 	public Transform focusCamera;
 	//
 
@@ -42,25 +42,27 @@ public class PlayerBehaviour : CharacterBase
 	private float currentAttackRate;
 	//
 
-	new protected void Start()
+	 void Start()
 	{
+		base.Start();
+		animationController = GetComponent<AnimationController>();
+		speed = speedWalk; 
+
 		
-		PlayerStatsController.SetTypeCharacter(TypeCharacter.Wizard);
+		
 		currentLevel = PlayerStatsController.GetCurrentLevel();
 		type = PlayerStatsController.GetTypeCharacter();
 
 		basicStats = PlayerStatsController.intance.GetBasicStats(type);
 
-		animationController = GetComponent<AnimationController>();
-		speed = speedWalk;
+
 
 		controller = GetComponent<CharacterController>();
 
-		base.Start();
 	}
 
-        // Update is called once per frame
-        new void Update()
+	// Update is called once per frame
+	void Update()
 	{
 		base.Update();
 
@@ -69,7 +71,7 @@ public class PlayerBehaviour : CharacterBase
 			case PlayerStates.Movement:
 				{
 
-					if (Input.GetKey(KeyCode.LeftShift) || Input.GetAxis("Vertical") != 0)
+					if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Vertical") != 0)
 					{
 						speed = speedRun;
 						animationController.PlayAnimation(AnimationStates.RUN);
